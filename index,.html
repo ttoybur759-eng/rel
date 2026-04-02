@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<title>CSS Cricket Toss</title>
+<style>
+body {
+    margin:0;
+    padding:0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to top, #4caf50 0%, #81c784 100%);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    height:100vh;
+    overflow:hidden;
+}
+
+h1 {
+    color:#fff;
+    text-shadow:1px 1px 4px #000;
+}
+
+input {
+    padding:8px 12px;
+    margin:5px;
+    font-size:16px;
+    border-radius:6px;
+    border:1px solid #555;
+    text-align:center;
+}
+
+#hand {
+    position: relative;
+    width:220px;
+    height:120px;
+    margin-top:40px;
+    background: #f0c27b;
+    border-radius: 100px 100px 0 0;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+}
+
+#coin {
+    position: absolute;
+    width:80px;
+    height:80px;
+    top:30px;
+    left:70px;
+    border-radius:50%;
+    background: radial-gradient(circle at center, #ffd700 0%, #ffcc00 100%);
+    border:3px solid #aa8800;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-weight:bold;
+    font-size:14px;
+    color:#000;
+    cursor:pointer;
+    user-select:none;
+    transform-style: preserve-3d;
+    perspective:1000px;
+}
+
+#coin .face {
+    position:absolute;
+    width:100%;
+    height:100%;
+    backface-visibility:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+#coin .back {
+    transform: rotateY(180deg);
+}
+
+#result {
+    margin-top:30px;
+    font-size:30px;
+    font-weight:bold;
+    color:#fff;
+    text-shadow:1px 1px 5px #000;
+}
+</style>
+</head>
+<body>
+
+<h1>🏏 CSS Cricket Toss</h1>
+
+<input id="teamA" placeholder="Team A নাম লিখুন">
+<input id="teamB" placeholder="Team B নাম লিখুন">
+
+<div id="hand">
+    <div id="coin">
+        <div class="face front">TOSS A</div>
+        <div class="face back">TOSS B</div>
+    </div>
+</div>
+
+<div id="result"></div>
+
+<script>
+const coin = document.getElementById("coin");
+const frontFace = coin.querySelector(".front");
+const backFace = coin.querySelector(".back");
+const result = document.getElementById("result");
+const teamA = document.getElementById("teamA");
+const teamB = document.getElementById("teamB");
+const hand = document.getElementById("hand");
+
+function tossCSSCoin() {
+    const A = teamA.value || "Team A";
+    const B = teamB.value || "Team B";
+
+    frontFace.innerText = A;
+    backFace.innerText = B;
+    result.innerHTML = "";
+
+    // Reset
+    coin.style.transition = "none";
+    coin.style.top = "30px";
+    coin.style.left = "70px";
+    coin.style.transform = "rotateX(0deg) rotateY(0deg)";
+
+    // Toss animation
+    setTimeout(()=>{
+        coin.style.transition = "transform 5s ease-in-out, top 5s ease-in-out, left 5s ease-in-out";
+        const degX = 1080 + Math.random()*360;
+        const degY = 1080 + Math.random()*360;
+        const leftOffset = 50 + Math.random()*40;
+        coin.style.top = "-150px";
+        coin.style.left = leftOffset + "px";
+        coin.style.transform = `rotateX(${degX}deg) rotateY(${degY}deg)`;
+    },50);
+
+    setTimeout(()=>{
+        const winner = Math.random()<0.5 ? A:B;
+        coin.style.transition = "top 0.3s, left 0.3s, transform 0.3s";
+        coin.style.top = "30px";
+        coin.style.left = "70px";
+        coin.style.transform = "rotateX(0deg) rotateY(0deg)";
+
+        if(winner===A){
+            frontFace.innerText = winner;
+            backFace.innerText = B;
+        }else{
+            frontFace.innerText = winner;
+            backFace.innerText = A;
+        }
+
+        result.innerHTML = `🏆 ${winner} টস জিতেছে!`;
+    },5050);
+}
+
+hand.addEventListener("click", tossCSSCoin);
+hand.addEventListener("touchstart", tossCSSCoin);
+</script>
+
+</body>
+</html>
